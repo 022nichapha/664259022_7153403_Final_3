@@ -1,0 +1,85 @@
+:root {
+  --text: #786b58;
+  --text-h: #342b20;
+  --bg: #fff9ec;
+  --border: #eadfc9;
+  --code-bg: #fff0d9;
+  --accent: #df843d;
+  --accent-bg: rgba(223, 132, 61, 0.12);
+  --accent-border: rgba(223, 132, 61, 0.5);
+  --social-bg: rgba(255, 241, 216, 0.7);
+  --shadow: rgba(109, 75, 28, 0.08) 0 10px 24px -8px;
+
+  --sans: "Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif;
+  --heading: "Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 16px/1.55 var(--sans);
+  letter-spacing: 0;
+  color-scheme: light;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 32px;
+  letter-spacing: 0;
+  margin: 0;
+  @media (max-width: 1024px) {
+    font-size: 28px;
+    margin: 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
