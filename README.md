@@ -38,7 +38,7 @@ frontend/
 
 ## สร้างฐานข้อมูล
 
-PostgreSQL ใช้ฐานข้อมูล `product_db`, ผู้ใช้ `dev_user` และพอร์ต host `5433` ตามค่าพัฒนาใน `backend/.env` ตัวอย่างต่อไปนี้สร้าง Docker volume เพื่อเก็บข้อมูลให้คงอยู่แม้ container หยุดทำงาน:
+หากต้องการรัน PostgreSQL ในเครื่องแทน Neon ให้ใช้ฐานข้อมูล `product_db`, ผู้ใช้ `dev_user` และพอร์ต host `5433` ตัวอย่างต่อไปนี้สร้าง Docker volume เพื่อเก็บข้อมูลให้คงอยู่แม้ container หยุดทำงาน:
 
 ```powershell
 docker volume create journals_pgdata
@@ -61,18 +61,27 @@ docker ps
 
 ## ตั้งค่า environment
 
-ไฟล์ `backend/.env` ใช้เชื่อมต่อฐานข้อมูลจาก Node.js ที่รันบนเครื่อง host:
+ไฟล์ `backend/.env` ใช้เชื่อมต่อฐานข้อมูลจาก Node.js ที่รันบนเครื่อง host และไม่ควร commit ไฟล์นี้:
 
 ```dotenv
-DB_HOST=localhost
-DB_PORT=5433
-DB_NAME=product_db
-DB_USER=dev_user
-DB_PASSWORD=dev_password
+DATABASE_URL=postgresql://user:password@host:5432/database?sslmode=require
 PORT=5000
 ```
 
-ค่าผู้ใช้และรหัสผ่านในตัวอย่างมีไว้สำหรับพัฒนาในเครื่องเท่านั้น ควรเปลี่ยนเมื่อใช้กับสภาพแวดล้อมอื่น Backend รองรับ `DATABASE_URL` เพื่อใช้ URL เชื่อมต่อแทนค่าฐานข้อมูลแยกช่องได้
+แทน URL ตัวอย่างด้วย connection string จากผู้ให้บริการฐานข้อมูล Backend รองรับทั้ง `DATABASE_URL` และตัวแปรแยก `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` และ `DB_PASSWORD` สำหรับฐานข้อมูล PostgreSQL ที่รันในเครื่อง
+
+## Deploy บน Render และ Vercel
+
+Repository นี้มี `render.yaml` สำหรับ deploy backend เป็น Web Service บน Render:
+
+1. ใน Render เลือก **New > Blueprint** แล้วเชื่อมต่อ repository นี้
+2. กรอก `DATABASE_URL` ด้วย connection string ของ Neon เมื่อ Render ขอค่า secret จากนั้น deploy service `journals-api`
+3. ตรวจสอบว่า URL ของ backend เปิดได้และแสดง `Journals API is running`
+4. ไฟล์ `frontend/.env.production` ตั้ง `VITE_API_URL` ไปยัง Render API แล้ว หาก Render เปลี่ยน domain ให้แก้ URL ในไฟล์นี้ หรือกำหนด `VITE_API_URL` ใน Vercel Project Settings > Environment Variables ให้ตรงกับ domain ใหม่
+5. Deploy backend บน Render ด้วย เพื่อใช้ค่า CORS ที่อนุญาตโดเมน Vercel ข้างต้น
+6. Redeploy frontend บน Vercel เพื่อให้ Vite รวมค่า environment ใหม่เข้าไปใน build
+
+`render.yaml` ตั้ง `FRONTEND_URL` เป็นโดเมน production นี้ไว้แล้ว: `https://664259022-7153403-final-3.vercel.app`
 
 ไฟล์ `frontend/.env` ใช้กำหนด URL ของ API:
 
